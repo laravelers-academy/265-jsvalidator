@@ -407,3 +407,15 @@ JSValidator.prototype._password_confirmation = function (input) {
   }
 
 };
+
+JSValidator.prototype._checked = function (input) {
+
+  let msg = "Debes marcar esta casilla para continuar"; // expresión regular para validar integer
+
+  if (!input.checked) {
+
+    this.setError(input, msg);
+
+  }
+
+};
