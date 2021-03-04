@@ -277,33 +277,34 @@ JSValidator.prototype._required = function (input) {
 };
 
 JSValidator.prototype._length = function (input) {
+  // En primer lugar vamos a recuperar el valor del input
+  let value = input.value; // Determinar la longitud del input
 
-	let value = input.value;
+  let inputLength = value.length; // Definir minLength
 
-	let inputLength = value.length;
+  let minLength = input.dataset.min_length !== undefined ? Number(input.dataset.min_length) : this.validators.minLength; // Definir maxLength
 
-	let minLength = ( input.dataset.validators_minlength !== undefined ) ? Number(input.dataset.validators_minlength) : this.validators.minLength;
+  let maxLength = input.dataset.max_length !== undefined ? Number(input.dataset.max_length) : this.validators.maxLength; // Declarar la variable msg
 
-	let maxLength = ( input.dataset.validators_maxlength !== undefined ) ? Number(input.dataset.validators_maxlength) : this.validators.maxLength;	
+  let msg; // Verificar min length
 
-	let msg;
+  if (inputLength < minLength) {
 
-	if( inputLength < minLength ) {
+    msg = `Longitud no válida. Mínimo ${minLength} caracteres`,
 
-		msg = this.msg.minLength.replace('__minLength__', minLength);
+    this.setError(input, msg);
 
-		this.setError(input, msg);
+  } // Verificar max length
 
-	}
 
-	if( inputLength > maxLength ) {
+  if (inputLength > maxLength) {
+    
+    msg = `Longitud no válida. Máximo ${maxLength} caracteres`,
+    
+    this.setError(input, msg);
 
-		msg = this.msg.maxLength.replace('__maxLength__', maxLength);
-
-		this.setError(input, msg);
-
-	}	
- 	
+  }
+  
 };
 
 JSValidator.prototype._email = function (input) {
@@ -371,5 +372,38 @@ JSValidator.prototype._url = function(input) {
     	this.setError(input, msg);
 
     }
+
+};
+
+JSValidator.prototype._password_confirmation = function (input) {
+
+  // En primer lugar vamos a recuperar el valor del input
+  let value = input.value;
+
+  // Vamos a crear un arreglo de inputs con el valor password
+  let password_inputs = [];
+
+  // Encontrar un input con el nombre contraseña
+  this.inputs.forEach( input => {
+
+    if(input.name == "password") password_inputs.push(input);
+
+  });
+
+  if(password_inputs.length == 0){
+
+    this.setError(input, "No se ha encontrado un campo de contraseña para validar");
+
+  }else {
+
+    let password_input = password_inputs[0];
+
+    if (password_input.value != value) {
+    
+      this.setError(input, "Los campos de contraseña no coinciden");
+    
+    }
+
+  }
 
 };
