@@ -261,6 +261,29 @@ class JSValidator {
 
 }
 
+/**
+ * Este método permite añadir errores a partir de un objeto externo
+ * en este caso el objeto de errores es el que es devuelto por Laravel
+ */
+JSValidator.prototype.appendExternalErrors = function (errors){
+
+  Object.entries(errors).forEach(([key, value]) => {
+
+      let input = document.querySelector(`#${this.form.id}  input[name=${key}]`);
+      
+      // Recuperar el nodo de span de error
+      let span = input.nextElementSibling; 
+
+      value.forEach( val => {
+
+          span.innerHTML += val + '<br />';
+
+      });
+
+  });
+
+};
+
 
 JSValidator.prototype._required = function (input) {
 
