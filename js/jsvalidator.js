@@ -1,6 +1,6 @@
 class JSValidator {
 
-	status = true;
+	status = false;
 
 	errors = [];
 
